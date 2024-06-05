@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "npx tsx src/server.ts"
+    "dev": "npx tsx src/server.ts",
+    "knex": "node --no-warnings --import tsx ./node_modules/knex/bin/cli.js"
+  },
+  "_comments": {
+    "knex": "Comando para executar o CLI do Knex com suporte para TypeScript"
   },
   "keywords": [],
   "author": "",

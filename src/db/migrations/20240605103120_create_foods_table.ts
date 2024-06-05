@@ -9,8 +9,15 @@ export async function up(knex: Knex): Promise<void> {
     table.timestamp('created_at').defaultTo(knex.fn.now()).notNullable()
     table.timestamp('updated_at').nullable()
 
-    table.uuid('user_id').unsigned().references('id').inTable('users')
+    table
+      .uuid('user_id')
+      .unsigned()
+      .references('id')
+      .inTable('users')
+      .onDelete('CASCADE')
   })
 }
 
-export async function down(knex: Knex): Promise<void> {}
+export async function down(knex: Knex): Promise<void> {
+  await knex.schema.dropTable('foods')
+}

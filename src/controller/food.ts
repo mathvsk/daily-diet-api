@@ -25,4 +25,12 @@ export const foodController = async (app: FastifyInstance) => {
 
     return reply.code(201).send()
   })
+
+  app.get('/food', async (request, reply) => {
+    const foods = await knex('foods').where({ user_id: request.user.id })
+
+    return reply.send({
+      foods,
+    })
+  })
 }

@@ -3,6 +3,10 @@ import { knex } from '../database'
 import { z } from 'zod'
 import { randomUUID } from 'node:crypto'
 
+interface IParams {
+  foodId: string
+}
+
 export const foodController = async (app: FastifyInstance) => {
   app.addHook('preHandler', app.basicAuth)
 
@@ -31,6 +35,22 @@ export const foodController = async (app: FastifyInstance) => {
 
     return reply.send({
       foods,
+    })
+  })
+
+  app.get<{ Params: IParams }>('/food/:id', async (request, reply) => {
+    const { foodId } = request.params
+
+    const food = await knex('foods')
+      .where({ user_id: request.user.id, id: foodId })
+      .first()
+
+    if (!food) {
+      return reply.code(404).send()
+    }
+
+    return reply.send({
+      food,
     })
   })
 }

@@ -15,14 +15,16 @@ export const foodController = async (app: FastifyInstance) => {
       name: z.string(),
       description: z.string(),
       inDiet: z.boolean(),
+      date: z.coerce.date(),
     })
 
-    const { name, description, inDiet } = foodSchema.parse(request.body)
+    const { name, description, inDiet, date } = foodSchema.parse(request.body)
 
     await knex('foods').insert({
       id: randomUUID(),
       name,
       description,
+      date,
       in_diet: inDiet,
       user_id: request.user.id,
     })

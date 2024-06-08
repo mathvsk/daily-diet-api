@@ -13,6 +13,7 @@ interface IFood {
   name: string
   description: string
   in_diet: boolean
+  date: Date
   created_at: Date
   updated_at?: Date
   user_id: string

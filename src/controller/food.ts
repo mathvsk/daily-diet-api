@@ -97,4 +97,34 @@ export const foodController = async (app: FastifyInstance) => {
       bestOnDietSequence,
     })
   })
+
+  app.put<{ Params: IParams }>('/:foodId', async (request, reply) => {
+    const { foodId } = request.params
+
+    const foodSchema = z.object({
+      name: z.string(),
+      description: z.string(),
+      inDiet: z.boolean(),
+      date: z.coerce.date(),
+    })
+
+    const { name, description, inDiet, date } = foodSchema.parse(request.body)
+
+    const food = await knex('foods')
+      .where({ user_id: request.user.id, id: foodId })
+      .first()
+
+    if (!food) {
+      return reply.code(404).send()
+    }
+
+    await knex('foods').where({ user_id: request.user.id, id: foodId }).update({
+      name,
+      description,
+      date,
+      in_diet: inDiet,
+    })
+
+    return reply.code(204).send()
+  })
 }

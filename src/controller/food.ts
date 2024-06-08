@@ -127,4 +127,20 @@ export const foodController = async (app: FastifyInstance) => {
 
     return reply.code(204).send()
   })
+
+  app.delete<{ Params: IParams }>('/:foodId', async (request, reply) => {
+    const { foodId } = request.params
+
+    const food = await knex('foods')
+      .where({ user_id: request.user.id, id: foodId })
+      .first()
+
+    if (!food) {
+      return reply.code(404).send()
+    }
+
+    await knex('foods').where({ user_id: request.user.id, id: foodId }).delete()
+
+    return reply.code(204).send()
+  })
 }

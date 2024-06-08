@@ -10,7 +10,7 @@ interface IParams {
 export const foodController = async (app: FastifyInstance) => {
   app.addHook('preHandler', app.basicAuth)
 
-  app.post('/food', async (request, reply) => {
+  app.post('/', async (request, reply) => {
     const foodSchema = z.object({
       name: z.string(),
       description: z.string(),
@@ -30,7 +30,7 @@ export const foodController = async (app: FastifyInstance) => {
     return reply.code(201).send()
   })
 
-  app.get('/food', async (request, reply) => {
+  app.get('/', async (request, reply) => {
     const foods = await knex('foods').where({ user_id: request.user.id })
 
     return reply.send({
@@ -38,7 +38,7 @@ export const foodController = async (app: FastifyInstance) => {
     })
   })
 
-  app.get<{ Params: IParams }>('/food/:id', async (request, reply) => {
+  app.get<{ Params: IParams }>('/:id', async (request, reply) => {
     const { foodId } = request.params
 
     const food = await knex('foods')

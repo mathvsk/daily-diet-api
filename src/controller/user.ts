@@ -6,7 +6,7 @@ import { knex } from '../database'
 import { randomUUID } from 'node:crypto'
 
 export async function userController(app: FastifyInstance) {
-  app.post('/user', async (request, reply) => {
+  app.post('/', async (request, reply) => {
     const createUserSchema = z.object({
       name: z.string(),
       email: z.string().email(),

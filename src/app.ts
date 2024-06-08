@@ -12,5 +12,9 @@ app.register(basicAuth, {
   authenticate: true,
 })
 
-app.register(userController)
-app.register(foodController)
+app.register(userController, {
+  prefix: '/users',
+})
+app.register(foodController, {
+  prefix: '/foods',
+})

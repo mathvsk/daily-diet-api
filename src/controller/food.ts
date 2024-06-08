@@ -55,4 +55,46 @@ export const foodController = async (app: FastifyInstance) => {
       food,
     })
   })
+
+  app.get('/metrics', async (request, reply) => {
+    const foods = await knex('foods')
+      .where({ user_id: request.user.id })
+      .orderBy('date', 'asc')
+
+    const { totalUserFoodInDiet, totalUserFoodInNotDiet } = foods.reduce(
+      (counts, food) => {
+        if (food.in_diet) {
+          counts.totalUserFoodInDiet += 1
+        } else {
+          counts.totalUserFoodInNotDiet += 1
+        }
+        return counts
+      },
+      { totalUserFoodInDiet: 0, totalUserFoodInNotDiet: 0 },
+    )
+
+    const { bestOnDietSequence } = foods.reduce(
+      (accumulator, food) => {
+        if (food.in_diet) {
+          accumulator.currentSequence += 1
+        } else {
+          accumulator.currentSequence = 0
+        }
+
+        if (accumulator.currentSequence > accumulator.bestOnDietSequence) {
+          accumulator.bestOnDietSequence = accumulator.currentSequence
+        }
+
+        return accumulator
+      },
+      { bestOnDietSequence: 0, currentSequence: 0 },
+    )
+
+    reply.send({
+      totalUserFood: totalUserFoodInDiet + totalUserFoodInNotDiet,
+      totalUserFoodInDiet,
+      totalUserFoodInNotDiet,
+      bestOnDietSequence,
+    })
+  })
 }

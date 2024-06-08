@@ -40,7 +40,7 @@ export const foodController = async (app: FastifyInstance) => {
     })
   })
 
-  app.get<{ Params: IParams }>('/:id', async (request, reply) => {
+  app.get<{ Params: IParams }>('/:foodId', async (request, reply) => {
     const { foodId } = request.params
 
     const food = await knex('foods')

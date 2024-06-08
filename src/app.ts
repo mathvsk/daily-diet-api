@@ -13,8 +13,8 @@ app.register(basicAuth, {
 })
 
 app.register(userController, {
-  prefix: '/users',
+  prefix: '/user',
 })
 app.register(foodController, {
-  prefix: '/foods',
+  prefix: '/food',
 })
